@@ -1,4 +1,19 @@
 <lift:surround with="default" at="content">
-
+    <table>
+        <tr>
+            <th>DateOf</th>
+            <th>Creator</th>
+            <th>Lat,Lon (accuracy)</th>
+        </tr>
+        <lift:Coordinates.list>
+            <coords:entry>
+                <tr>
+                    <td><e:date /></td>
+                    <td><e:creator /></td>
+                    <td><e:coords /></td>
+                </tr>
+            </coords:entry>
+         </lift:Coordinates.list>
+    </table>
 </lift:surround>
 

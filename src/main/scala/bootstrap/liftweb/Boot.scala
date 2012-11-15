@@ -9,6 +9,8 @@ import Helpers._
 import net.liftweb.db._
 import _root_.java.sql._
 import net.liftweb.mapper.Schemifier
+import com.dzig.web.model.CoordinatesTest
+import com.dzig.web.api.RestAPI
 
 /**
   * A class that's instantiated early and run.  It allows the application
@@ -16,6 +18,8 @@ import net.liftweb.mapper.Schemifier
   */
 class Boot {
   val logger = Logger(classOf[Boot])
+
+  //DefaultConnectionIdentifier.jndiName = "jdbc/LiftDB"
 
   def boot {
     // where to search snippet
@@ -27,12 +31,13 @@ class Boot {
       logger.info(msg)
     }
 
-   // Schemifier.schemify(true, schemeLogger _, ListEntry)
+   Schemifier.schemify(true, schemeLogger _, CoordinatesTest)
 
     // Build SiteMap
     val entries = Menu(Loc("Home", List("index"), "Home")) :: Nil
 
     LiftRules.setSiteMap(SiteMap(entries:_*))
+    LiftRules.statelessDispatchTable.append(RestAPI) // stateless -- no session created
   }
   
   object DBVendor extends ConnectionManager {
