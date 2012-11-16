@@ -17,7 +17,7 @@ class Coordinates  extends DispatchSnippet {
         bind("e", chooseTemplate("coords", "entry", xhtml),
           "date" -> line.dateOf.asHtml,
           "creator" -> Text(line.creator.is),
-          "coords" -> { Text(line.lat.is.toString) ++ Text(line.lon.is.toString) ++ Text(" (") ++ Text(line.accuracy.is.toString) ++ Text(")")})
+          "coords" -> { Text(line.lat.is.toString) ++Text(" ") ++ Text(line.lon.is.toString) ++ Text(" (") ++ Text(line.accuracy.is.toString) ++ Text(")")})
       })
   }
 

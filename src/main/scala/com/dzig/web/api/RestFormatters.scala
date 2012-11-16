@@ -2,7 +2,7 @@ package com.dzig.web.api
 
 import java.text.SimpleDateFormat
 
-import scala.xml.{Node, NodeSeq, Text}
+import xml.{Elem, Node, NodeSeq, Text}
 
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import net.liftweb.mapper.{By,MaxRows}
@@ -19,36 +19,12 @@ object RestFormatters {
   def timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
   // A simple helper to generate the REST ID of an Expense
-  def restId (c : CoordinatesTest) =
-    "http://www.dzig.com/api/coorditatestest/" + c.id
+  def restId (c : CoordinatesTest) = c.id.toString
 
   // A simple helper to generate the REST timestamp of an Expense
   def restTimestamp (e : CoordinatesTest) : String =
     timestamp.format(e.dateOf.is)
 
-  import net.liftweb.json.Xml
-  /**
-   * Generates the XML REST representation of an Expense
-   */
-  def toXML (c : CoordinatesTest) : Node = Xml.toXml(toJSON(c)).head
 
-  /**
-   * Generates the JSON REST representation of an Expense
-   */
-  def toJSON (c : CoordinatesTest) : JValue = {
-    import net.liftweb.json.JsonDSL._
-    import net.liftweb.json.JsonAST._
-
-    ("coorditateTest" ->
-      ("id" -> restId(c)) ~
-        ("date" -> restTimestamp(c)) ~
-        ("creator" -> c.creator.is) ~
-        ("lat" -> c.lat.is) ~
-        ("lon" -> c.lon.is) ~
-        ("accuracy" -> c.accuracy.is))
-  }
 
 }
-
-
-
