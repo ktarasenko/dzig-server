@@ -19,13 +19,23 @@ import com.dzig.web.api.RestAPI
 class Boot {
   val logger = Logger(classOf[Boot])
 
-  //DefaultConnectionIdentifier.jndiName = "jdbc/LiftDB"
+  DefaultConnectionIdentifier.jndiName = "jdbc/dzigdb"
 
   def boot {
     // where to search snippet
     LiftRules.addToPackages("com.dzig.web")
-    
-    if (!DB.jndiJdbcConnAvailable_?) DB.defineConnectionManager(DefaultConnectionIdentifier, DBVendor)
+
+    val vendor =
+      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+        Props.get("db.url") openOr
+          "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
+        Props.get("db.user"), Props.get("db.password"))
+
+    LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
+
+    DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
+
+    if (!DB.jndiJdbcConnAvailable_?) DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
 
     def schemeLogger (msg : => AnyRef) = {
       logger.info(msg)
@@ -40,24 +50,7 @@ class Boot {
     LiftRules.statelessDispatchTable.append(RestAPI) // stateless -- no session created
   }
   
-  object DBVendor extends ConnectionManager {
-  def newConnection(name: ConnectionIdentifier): Box[Connection] = {
-    try {
-      /** Uncomment if you really want Derby
-       * 
-      Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
-      val dm = DriverManager.getConnection("jdbc:derby:pca_example;create=true")
-      */
 
-      Class.forName("org.h2.Driver")
-      val dm = DriverManager.getConnection("jdbc:h2:pca_example")
-      Full(dm)
-    } catch {
-      case e : Exception => e.printStackTrace; Empty
-    }
-  }
-  def releaseConnection(conn: Connection) {conn.close}
-}
 
 }
 
