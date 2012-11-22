@@ -19,7 +19,7 @@ object RestAPI extends RestHelper{
 
   implicit def cvt: JxCvtPF[Any] = {
     //Generic list templates
-    case (JsonSelect, c : List[Convertable], _) => JArray(for{item <- c} yield item.toJson)
+    case (JsonSelect, c : List[Convertable], _) => JField("coordinates",JArray(for{item <- c} yield item.toJson))
     case (XmlSelect, c : List[Convertable], _) => <list>{c.mapConserve(f => f.toXml)}</list>
 
     //Single-items of convertable
