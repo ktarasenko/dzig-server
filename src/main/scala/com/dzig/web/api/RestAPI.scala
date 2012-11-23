@@ -3,12 +3,12 @@ package com.dzig.web.api
 
 import net.liftweb.http._
 import net.liftweb.json.JsonAST._
+import net.liftweb.json.JsonDSL._
 import com.dzig.web.model._
 import net.liftweb.common.{Empty, Failure, Full, Box}
 import java.util.Date
 import net.liftweb.mapper.By
 import net.liftweb.http.BadResponse
-import net.liftweb.json.JsonAST.JString
 import net.liftweb.http.ResponseWithReason
 import net.liftweb.util.BasicTypesHelpers.AsLong
 import net.liftweb.http.rest._
@@ -17,9 +17,18 @@ import xml.{Elem, Node}
 
 object RestAPI extends RestHelper{
 
+  val STATUS_OK = 200
+
+  def meta(status: Int) = status match {
+    case STATUS_OK  =>
+      (("status" -> status) ~
+      ("asOf"   -> RestFormatters.restAsOf))
+  }
+
+
   implicit def cvt: JxCvtPF[Any] = {
     //Generic list templates
-    case (JsonSelect, c : List[Convertable], _) => JField("coordinates",JArray(for{item <- c} yield item.toJson))
+    case (JsonSelect, c : List[Convertable], _) => ("meta" -> meta(STATUS_OK) ++  JField("data",JArray(for{item <- c} yield item.toJson)))
     case (XmlSelect, c : List[Convertable], _) => <list>{c.mapConserve(f => f.toXml)}</list>
 
     //Single-items of convertable

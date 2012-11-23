@@ -30,7 +30,7 @@ class CoordinatesTest extends LongKeyedMapper[CoordinatesTest] with IdPK with Co
   object creator extends MappedString(this,64)
 
 
-  override def toJson =   ("coordinate" ->
+  override def toJson =  (
     ("id" -> RestFormatters.restId(this)) ~
       ("date" -> RestFormatters.restTimestamp(this)) ~
       ("creator" -> this.creator.is) ~

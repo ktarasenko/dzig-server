@@ -8,6 +8,7 @@ import net.liftweb.common.{Box,Empty,Failure,Full}
 import net.liftweb.mapper.{By,MaxRows}
 import net.liftweb.json.JsonAST.{JValue, JObject}
 import com.dzig.web.model.CoordinatesTest
+import java.util.Date
 
 /**
  * This object provides some conversion and formatting specific to our
@@ -25,6 +26,7 @@ object RestFormatters {
   def restTimestamp (e : CoordinatesTest) : String =
     timestamp.format(e.dateOf.is)
 
+  def restAsOf : String = timestamp.format(new Date())
 
 
 }
