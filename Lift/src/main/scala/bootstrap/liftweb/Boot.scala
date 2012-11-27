@@ -9,7 +9,7 @@ import Helpers._
 import net.liftweb.db._
 import _root_.java.sql._
 import net.liftweb.mapper.Schemifier
-import com.dzig.web.model.CoordinatesTest
+import com.dzig.web.model.{User, CoordinatesTest}
 import com.dzig.web.api.RestAPI
 
 /**
@@ -37,11 +37,11 @@ class Boot {
 
     if (!DB.jndiJdbcConnAvailable_?) DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
 
-    def schemeLogger (msg : => AnyRef) = {
+    def schemeLogger (msg : => AnyRef)  {
       logger.info(msg)
     }
 
-   Schemifier.schemify(true, schemeLogger _, CoordinatesTest)
+   Schemifier.schemify(true, schemeLogger _, CoordinatesTest, User)
 
     // Build SiteMap
     val entries = Menu(Loc("Home", List("index"), "Home")) :: Nil
