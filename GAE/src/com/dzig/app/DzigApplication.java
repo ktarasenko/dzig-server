@@ -2,7 +2,6 @@ package com.dzig.app;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
-import org.restlet.engine.http.ServerCall;
 import org.restlet.routing.Router;
 
 import com.dzig.api.CoordinateServerResource;
