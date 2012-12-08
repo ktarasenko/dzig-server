@@ -22,6 +22,7 @@ public class RestUtils {
 	public static final int STATUS_OK = 200;
 	public static final int STATUS_CREATED = 201;
 	public static final int  STATUS_UNPROCESSABLE = 422;
+	public static final int STATUS_FORBIDDEN = 403;
 	
 	private static DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	private static NumberFormat numberFormat = new DecimalFormat("#.#####");
@@ -42,7 +43,7 @@ public class RestUtils {
 		return numberFormat.format(dbl);
 	}
 	
-	public static Representation produceResponse(Iterable<? extends Convertable> data) throws JSONException, IOException{
+	public static Representation produceResponse(Iterable<? extends Convertable> data) throws JSONException{
 		JSONObject json = new JSONObject();
 		for (Convertable item: data){
 			json.accumulate("data", item.toJson());
@@ -50,13 +51,13 @@ public class RestUtils {
 		return produceResponse(json, generateMeta(STATUS_OK));
 	}
 	
-	public static Representation produceResponse(Convertable data) throws JSONException, IOException{
+	public static Representation produceResponse(Convertable data) throws JSONException{
 		JSONObject json = new JSONObject();
 		json.put("data", data.toJson());
 		return produceResponse(json, generateMeta(STATUS_OK));
 	}
 	
-	private static Representation produceResponse(JSONObject json, JSONObject meta) throws IOException, JSONException{
+	private static Representation produceResponse(JSONObject json, JSONObject meta) throws JSONException{
 		json.put("meta", meta);
 		JsonRepresentation jsonRep = new JsonRepresentation(json);
 		jsonRep.setIndenting(true);
@@ -70,8 +71,8 @@ public class RestUtils {
 		return json;
 	}
 
-	public static Representation produceErrorResponce(RestException rex) throws JSONException, IOException{
-		JSONObject meta = generateMeta(STATUS_UNPROCESSABLE);
+	public static Representation produceErrorResponce(RestException rex) throws JSONException{
+		JSONObject meta = generateMeta(rex.getStatusCode());
 		meta.put("error", rex.getMessage());
 		return produceResponse(new JSONObject(), meta);
 	}
@@ -82,7 +83,7 @@ public class RestUtils {
 			} catch (RuntimeException rex){
 				//do nothing 
 			}
-		throw new RestException("Unable to parse parameter :" + key);
+		throw new RestException(RestUtils.STATUS_UNPROCESSABLE,"Unable to parse parameter :" + key);
 	}
 
 	public static Date getDate(Map<String, String> map, String key) throws RestException {
@@ -91,14 +92,14 @@ public class RestUtils {
 		} catch (ParseException e) {
 			//do nothing
 		}
-		throw new RestException("Unable to parse parameter :" + key);
+		throw new RestException(RestUtils.STATUS_UNPROCESSABLE, "Unable to parse parameter :" + key);
 	}
 
 	public static String getString(Map<String, String> map, String key) throws RestException {
 		if (map.containsKey(key)){
 			return (String) map.get(key);
 		}
-		throw new RestException("Unable to parse parameter :" + key);
+		throw new RestException(RestUtils.STATUS_UNPROCESSABLE, "Unable to parse parameter :" + key);
 	}
 	
 }

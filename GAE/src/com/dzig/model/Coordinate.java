@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import com.dzig.utils.RestException;
 import com.dzig.utils.RestUtils;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.apphosting.api.UserServicePb.UserService;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -39,7 +41,7 @@ public class Coordinate implements Convertable{
 		return  new Coordinate(RestUtils.getDouble(map, "lat"),
 		RestUtils.getDouble(map, "lon"),
 		RestUtils.getDouble(map, "accuracy"),
-		RestUtils.getString(map, "creatorId"));		
+		UserServiceFactory.getUserService().getCurrentUser().getUserId());
 	}
 
 

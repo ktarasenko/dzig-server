@@ -4,6 +4,7 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import com.dzig.api.AuthFilter;
 import com.dzig.api.CoordinateAPI;
 
 public class DzigApplication extends Application {
@@ -15,9 +16,12 @@ public class DzigApplication extends Application {
     public Restlet createInboundRoot() {
 
         Router router = new Router(getContext());
-        // Defines only one route
+        
+        AuthFilter filter = new AuthFilter();
+        filter.setNext(router);
+        
         router.attach("/coordinate",CoordinateAPI.class);
 
-        return router;
+        return filter;
     }
 }
