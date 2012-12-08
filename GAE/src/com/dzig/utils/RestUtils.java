@@ -1,12 +1,10 @@
 package com.dzig.utils;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -43,38 +41,38 @@ public class RestUtils {
 		return numberFormat.format(dbl);
 	}
 	
-	public static Representation produceResponse(Iterable<? extends Convertable> data) throws JSONException{
+	public static Representation createResponse(Iterable<? extends Convertable> data) throws JSONException{
 		JSONObject json = new JSONObject();
 		for (Convertable item: data){
 			json.accumulate("data", item.toJson());
 		}
-		return produceResponse(json, generateMeta(STATUS_OK));
+		return createResponse(json, createMeta(STATUS_OK));
 	}
 	
-	public static Representation produceResponse(Convertable data) throws JSONException{
+	public static Representation createResponse(Convertable data) throws JSONException{
 		JSONObject json = new JSONObject();
 		json.put("data", data.toJson());
-		return produceResponse(json, generateMeta(STATUS_OK));
+		return createResponse(json, createMeta(STATUS_OK));
 	}
 	
-	private static Representation produceResponse(JSONObject json, JSONObject meta) throws JSONException{
+	private static Representation createResponse(JSONObject json, JSONObject meta) throws JSONException{
 		json.put("meta", meta);
 		JsonRepresentation jsonRep = new JsonRepresentation(json);
 		jsonRep.setIndenting(true);
 		return jsonRep;
 	}
 	
-	private static JSONObject generateMeta(int status) throws JSONException {
+	private static JSONObject createMeta(int status) throws JSONException {
 		JSONObject json = new JSONObject();
 		json.put("status", status);
 		json.put("asOf", formatDate(new Date()));
 		return json;
 	}
 
-	public static Representation produceErrorResponce(RestException rex) throws JSONException{
-		JSONObject meta = generateMeta(rex.getStatusCode());
+	public static Representation createErrorResponse(RestException rex) throws JSONException{
+		JSONObject meta = createMeta(rex.getStatusCode());
 		meta.put("error", rex.getMessage());
-		return produceResponse(new JSONObject(), meta);
+		return createResponse(new JSONObject(), meta);
 	}
 
 	public static double getDouble(Map<String, String> map, String key) throws RestException {	

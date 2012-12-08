@@ -2,7 +2,6 @@ package com.dzig;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import com.google.appengine.api.users.User;
@@ -12,7 +11,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 @SuppressWarnings("serial")
 public class AuthServlet extends HttpServlet {
 	
-	 private static final Logger log = Logger.getLogger(HttpServlet.class.getName());
+	@SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger(HttpServlet.class.getName());
 	
 	 public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	        UserService userService = UserServiceFactory.getUserService();

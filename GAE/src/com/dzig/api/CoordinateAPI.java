@@ -2,7 +2,7 @@ package com.dzig.api;
 
 import static com.dzig.objectify.OfyService.ofy;
 
-import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.restlet.data.Form;
@@ -19,30 +19,35 @@ import com.googlecode.objectify.cmd.Query;
 
 public class CoordinateAPI extends ServerResource {
 
+	@SuppressWarnings("unused")
+	private static final Logger log = Logger.getLogger("API");
+	
+	
+	
 	@Get
-	public Representation handleGet() throws JSONException, IOException {
+	public Representation handleGet() throws JSONException {
 		String creatorFilter = getQueryValue("creatorId");
 		Query<Coordinate> ref = ofy().load().type(Coordinate.class);
 		if (creatorFilter != null) {
 			ref = ref.filter("creatorId", creatorFilter);
 		}
 		
-		return RestUtils.produceResponse(ref.list());
+		return RestUtils.createResponse(ref.list());
 	}
 
 
 	@Post
-	public Representation handlePost(Representation rep) throws JSONException, IOException {
+	public Representation handlePost(Representation rep) throws JSONException{
 		Form form = new Form(rep);
 		try {
 			Coordinate coord = Coordinate
 					.produceFromAttributes(form.getValuesMap());
 			ofy().save().entities(coord).now();
 			setStatus(Status.SUCCESS_CREATED);
-			return RestUtils.produceResponse(coord);
+			return RestUtils.createResponse(coord);
 		} catch (RestException rex) {
 			setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
-			return RestUtils.produceErrorResponce(rex);
+			return RestUtils.createErrorResponse(rex);
 		}
 	}
 }
