@@ -4,7 +4,7 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
-import com.dzig.api.CoordinateServerResource;
+import com.dzig.api.CoordinateAPI;
 
 public class DzigApplication extends Application {
 
@@ -16,7 +16,7 @@ public class DzigApplication extends Application {
 
         Router router = new Router(getContext());
         // Defines only one route
-        router.attachDefault(CoordinateServerResource.class);
+        router.attach("/coordinate",CoordinateAPI.class);
 
         return router;
     }
