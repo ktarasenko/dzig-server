@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dzig.api.AuthFilter;
 import com.dzig.utils.RestException;
 import com.dzig.utils.RestUtils;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -40,7 +41,8 @@ public class Coordinate implements Convertable{
 		return  new Coordinate(RestUtils.getDouble(map, "lat"),
 		RestUtils.getDouble(map, "lon"),
 		RestUtils.getDouble(map, "accuracy"),
-		UserServiceFactory.getUserService().getCurrentUser().getUserId());
+		AuthFilter.DEBUG_TURN_OFF_AUTH ? "100500": 
+				UserServiceFactory.getUserService().getCurrentUser().getUserId());
 	}
 
 

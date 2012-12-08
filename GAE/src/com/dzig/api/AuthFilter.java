@@ -20,12 +20,13 @@ public class AuthFilter extends Filter {
 	
 	private String authRef; 
 	
+	public static final boolean DEBUG_TURN_OFF_AUTH = false;
 	
 	@Override
 	protected int beforeHandle(Request request, Response response) {
 		if (authRef == null) authRef = request.getRootRef() + "/auth";
 		
-	    if (authRef.equals(request.getResourceRef().toString())
+	    if (DEBUG_TURN_OFF_AUTH ||authRef.equals(request.getResourceRef().toString())
 	    		|| UserServiceFactory.getUserService().isUserLoggedIn()){
 	    	return CONTINUE;
 	    } else {

@@ -22,7 +22,7 @@ public class AuthAPI extends ServerResource {
 		Form form = new Form(rep);
 		String url;
 		String token = form.getFirstValue("token");
-		String continueUrl = getRootRef() + "/user";
+		String continueUrl = form.getFirstValue("continueUrl", getRootRef() + "/user");
 		if ("logout".equals(form.getFirstValue("method"))){
 			url = UserServiceFactory.getUserService().createLogoutURL(continueUrl);
 		} else {
