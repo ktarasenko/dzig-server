@@ -71,7 +71,7 @@ public class RestUtils {
 
 	public static Representation createErrorResponse(RestException rex) throws JSONException{
 		JSONObject meta = createMeta(rex.getStatusCode());
-		meta.put("error", rex.getMessage());
+		meta.put("errorMessage", rex.getMessage());
 		return createResponse(new JSONObject(), meta);
 	}
 
