@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.restlet.data.Form;
+import org.restlet.data.Method;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -35,13 +36,12 @@ public class CoordinateAPI extends ServerResource {
 		return RestUtils.createResponse(ref.list());
 	}
 
-
 	@Post
 	public Representation handlePost(Representation rep) throws JSONException{
 		Form form = new Form(rep);
 		try {
 			Coordinate coord = Coordinate
-					.produceFromAttributes(form.getValuesMap());
+					.produceFromAttributes(getMethod() == Method.GET ? getRequest().getResourceRef().getQueryAsForm().getValuesMap() : form.getValuesMap());
 			ofy().save().entities(coord).now();
 			setStatus(Status.SUCCESS_CREATED);
 			return RestUtils.createResponse(coord);

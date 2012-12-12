@@ -14,7 +14,10 @@ public class UserInfo implements Convertable{
 	@Id private String id;
 	private String nickname;
 	private String email;
+	private String avatar;
 
+	public UserInfo(){};
+	
 	public UserInfo(String id, String nickname, String email) {
 		this.id = id;
 		this.nickname = nickname;
@@ -33,6 +36,7 @@ public class UserInfo implements Convertable{
 		json.put("id", String.valueOf(id));
 		json.put("email", String.valueOf(email));
 		json.put("nickname", String.valueOf(nickname));
+		json.put("avatar", String.valueOf(avatar));
 		return json;
 	}
 

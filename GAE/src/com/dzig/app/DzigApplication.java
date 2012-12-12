@@ -1,5 +1,6 @@
 package com.dzig.app;
 
+import static com.dzig.objectify.OfyService.ofy;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
@@ -18,7 +19,7 @@ public class DzigApplication extends Application {
     public Restlet createInboundRoot() {
 
         Router router = new Router(getContext());
-        
+        ofy();
         AuthFilter filter = new AuthFilter();
         filter.setNext(router);
         
